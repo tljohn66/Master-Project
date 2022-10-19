@@ -1,0 +1,53 @@
+//Early main page implementation, basic sidebar, test game titles, homepage icon.
+
+
+let canvasX = 500;
+let canvasY = 1100;
+
+
+let sidebarWidth = 45;
+
+function setup() {
+  let cnv = createCanvas(canvasX, canvasY);
+}
+
+//GUI
+function draw() {
+  background(207, 223, 250);
+  
+  //Sidebar, is at 0,0, with a width of sidebarWidth,and a length of the canvas
+  //To-Do:
+  //Move to own function.
+  //generalize home icon position.
+  //Have sidebar elements scroll with the screen.
+  rect(0, 0, sidebarWidth, canvasY);
+  
+  //placeholder home icon
+  fill(150)
+  rect(15, 20, 15, 15);
+  
+  
+  
+  noFill();
+  createGameSelection((createVector(100, 100)), "Test");
+  createGameSelection((createVector(100, 400)), "Test2");
+  createGameSelection((createVector(100, 700)), "Test3");
+}
+
+//function that creates clickable game title, input desired position, name and the image.
+//To-Do:
+//Add images
+//Add small description of game.
+function createGameSelection(position, name) {
+  
+    //Title
+    
+    fill(0);
+    textSize(40);
+    text(name, position.x, position.y)
+  
+    //placeholder image for testing purpouses.
+    fill(255);
+    rect((position.x + 80), (position.y + 60), 250, 125);
+    
+}
