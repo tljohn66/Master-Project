@@ -3,9 +3,15 @@
 
 let canvasX = 500;
 let canvasY = 1100;
-
+let matchingImage, mazeImage, bugImage;
 
 let sidebarWidth = 45;
+
+function preload() {
+  matchingImage = loadImage('Matching.png');
+  mazeImage = loadImage('BugSquash.png');
+  bugImage = loadImage('MazeGame.png');
+}
 
 function setup() {
   let cnv = createCanvas(canvasX, canvasY);
@@ -29,9 +35,14 @@ function draw() {
   
   
   noFill();
-  createGameSelection((createVector(100, 100)), "Test");
-  createGameSelection((createVector(100, 400)), "Test2");
-  createGameSelection((createVector(100, 700)), "Test3");
+  createGameSelection((createVector(100, 100)), "Matching Game");
+  createGameSelection((createVector(100, 400)), "Maze Game");
+  createGameSelection((createVector(100, 700)), "Bug-Squash");
+
+image(matchingImage, 180,160,250,125);
+image(mazeImage, 180,460, 250, 125);
+image(bugImage, 180,760, 250, 125);
+
 }
 
 //function that creates clickable game title, input desired position, name and the image.
