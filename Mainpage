@@ -15,7 +15,6 @@ let matchingImage, mazeImage, bugImage;
 
 function preload() {
   matchingImage = loadImage('Matching.png');
-  mazeImage = loadImage('MazeGame.png');
   bugImage = loadImage('BugSquash.png');
    
   
@@ -59,6 +58,7 @@ function draw() {
     textSize(30);
     fill("black");
     text("Matching Game Coming Soon!", 30,900);
+       image(matchingImage, 80,660,300,200);
     
     mazeGameButtons();
 
@@ -153,7 +153,7 @@ function draw() {
     textSize(30);
     fill("black");
     text("Bug Squash Game Coming Soon!", 30,900);
-    
+     image(bugImage, 80,660,300,200);
     mazeGameButtons();
     
   }
