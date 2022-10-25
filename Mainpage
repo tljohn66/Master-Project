@@ -184,21 +184,21 @@ function menuOptions(){
     buttonM.position(80, 80);
     buttonM.size(300,50)
     buttonM.style("font-size", "30px");
-    buttonM.style("color","black");
+    buttonM.style("background-color","lime");
     buttonM.mousePressed(game1);
   
     button2 = createButton('Maze Game');
     button2.position(80, 250);
     button2.size(300,50)
     button2.style("font-size", "30px");
-    button2.style("color","black");
+    button2.style("background-color","cyan");
     button2.mousePressed(game2);
   
     button3 = createButton('Bug Squash');
     button3.position(80, 420);
     button3.size(300,50)
     button3.style("font-size", "30px");
-    button3.style("color","black");
+    button3.style("background-color","yellow");
     button3.mousePressed(game3);
 }
 
@@ -231,7 +231,6 @@ function game2(){
 function game3(){
   game = 3;
 }
-
 
 
 
