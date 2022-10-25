@@ -1,53 +1,238 @@
-//Early main page implementation, basic sidebar, test game titles, homepage icon.
+var game;
 
-
+let bgCol = 150;
+let leftWallX, leftWallY, leftWallW, leftWallH;
+let topWallX, topWallY, topWallW, topWallH;
+let bottomWallX, bottomWallY, bottomWallW, bottomWallH;
+let rightWallX, rightWallY, rightWallW, rightWallH;
+let obsticle1X, obsticle1Y, obsticle1W, obsticle1H;
+let endX, endY, endW, endH;
 let canvasX = 500;
 let canvasY = 1100;
+var lives = 1;
+var levelCompleted = 0;
 
 
 let sidebarWidth = 45;
 
 function setup() {
+  game = 0;
   let cnv = createCanvas(canvasX, canvasY);
+  lives = 1;
 }
 
 //GUI
 function draw() {
-  background(207, 223, 250);
+  clear();
+  if(game == 0){
+    background(207, 223, 250);
+ 
+    //Sidebar, is at 0,0, with a width of sidebarWidth,and a length of the canvas
+    //To-Do:
+    //Move to own function.
+    //generalize home icon position.
+    //Have sidebar elements scroll with the screen.
+    rect(0, 0, sidebarWidth, canvasY);
+
+    //placeholder home icon
+    fill(150)
+    rect(15, 20, 15, 15);
+
+    menuOptions();   
+    
+    
+
+  } 
   
-  //Sidebar, is at 0,0, with a width of sidebarWidth,and a length of the canvas
-  //To-Do:
-  //Move to own function.
-  //generalize home icon position.
-  //Have sidebar elements scroll with the screen.
-  rect(0, 0, sidebarWidth, canvasY);
+  if(game == 1){
+    let cnv = createCanvas(canvasX, canvasY);
+    background(207, 223, 250);
+    textSize(30);
+    fill("black");
+    text("Matching Game Coming Soon!", 30,900);
+    
+    mazeGameButtons();
+
+  }  
+
   
-  //placeholder home icon
-  fill(150)
-  rect(15, 20, 15, 15);
-  
-  
-  
-  noFill();
-  createGameSelection((createVector(100, 100)), "Test");
-  createGameSelection((createVector(100, 400)), "Test2");
-  createGameSelection((createVector(100, 700)), "Test3");
+
+
+  if(game == 2){
+    let cnv = createCanvas(canvasX, canvasY);
+    background(207, 223, 250);
+    //Creates the wall of the maze
+    leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
+    topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
+    bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
+    rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
+    obsticle1X = 100; obsticle1Y = 660; obsticle1W = 350; obsticle1H = 300;
+    endX = 100, endY = 960; endW = 20; endH = 20;
+    
+    fill(245,10,80);
+    rect(leftWallX, leftWallY, leftWallW, leftWallH);
+
+    fill(245,10,80);
+    rect(topWallX, topWallY, topWallW, topWallH);
+
+    fill(245,10,80);
+    rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
+
+    fill(245,10,80);
+    rect(rightWallX, rightWallY, rightWallW, rightWallH);
+
+    fill(245, 10,80);
+    rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
+
+    fill(90);
+    rect(endX, endY, endW, endH);
+
+    fill(50);
+    textSize(30);
+    text("Lives:" + lives, 20,520,20);
+
+    
+    mazeGameButtons();
+
+    if(isMouseInsideE(endX, endY, endW, endH)){
+      if(lives != 0){
+        fill(50);
+        textSize(50);
+        text("Winner!!!",190,830);
+        levelCompleted = 1;
+      }
+      else{
+        fill(50);
+        textSize(50);
+        text("Loser!!!",190,830);
+      }
+    }
+
+
+
+    if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
+      bgCol = 30;
+      lives = 0;
+    } 
+    
+     if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
+      bgCol = 30;
+      lives = 0;
+      } 
+      
+    if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
+      bgCol = 30;
+      lives = 0;
+      } 
+      
+    if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
+      bgCol = 30;
+      lives = 0;
+      } 
+    
+    if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
+      bgCol = 30;
+      lives = 0;
+      } 
+      
+
+  }
+
+  if(game == 3){
+    let cnv = createCanvas(canvasX, canvasY);
+    background(207, 223, 250);
+    textSize(30);
+    fill("black");
+    text("Bug Squash Game Coming Soon!", 30,900);
+    
+    mazeGameButtons();
+    
+  }
+
 }
 
-//function that creates clickable game title, input desired position, name and the image.
-//To-Do:
-//Add images
-//Add small description of game.
-function createGameSelection(position, name) {
-  
-    //Title
-    
-    fill(0);
-    textSize(40);
-    text(name, position.x, position.y)
-  
-    //placeholder image for testing purpouses.
-    fill(255);
-    rect((position.x + 80), (position.y + 60), 250, 125);
-    
+
+function isMouseInsideE(x, y, w, h){
+   if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
+
+    return true; 
+
+   } else {
+
+    return false; 
+   }
+
 }
+
+function isMouseInside(x, y, w, h){
+   if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
+
+    return true; 
+
+   } else {
+
+    return false; 
+   }
+
+}
+
+
+
+//Menu Buttons for Matching Game, Maze Game, and Bug Squash
+function menuOptions(){
+    buttonM = createButton('Matching Game');
+    buttonM.position(80, 80);
+    buttonM.size(300,50)
+    buttonM.style("font-size", "30px");
+    buttonM.style("color","black");
+    buttonM.mousePressed(game1);
+  
+    button2 = createButton('Maze Game');
+    button2.position(80, 250);
+    button2.size(300,50)
+    button2.style("font-size", "30px");
+    button2.style("color","black");
+    button2.mousePressed(game2);
+  
+    button3 = createButton('Bug Squash');
+    button3.position(80, 420);
+    button3.size(300,50)
+    button3.style("font-size", "30px");
+    button3.style("color","black");
+    button3.mousePressed(game3);
+}
+
+function mazeGameButtons(){
+  menu = createButton('Menu');
+    menu.position(80, 1040);
+    menu.size(100,50)
+    menu.style("font-size", "30px");
+    menu.style("color","black");
+    menu.mousePressed(setup);
+
+    next = createButton('Next');
+    next.position(400, 1040);
+    next.size(100,50)
+    next.style("font-size", "30px");
+    next.style("color","black");
+    next.mousePressed();
+}
+
+
+function game1(){
+  game = 1;
+}
+
+function game2(){
+  game = 2;
+  lives =1;
+}
+
+function game3(){
+  game = 3;
+}
+
+
+
+
+
