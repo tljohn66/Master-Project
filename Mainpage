@@ -11,6 +11,15 @@ let canvasX = 500;
 let canvasY = 1100;
 var lives = 1;
 var levelCompleted = 0;
+let matchingImage, mazeImage, bugImage;
+
+function preload() {
+  matchingImage = loadImage('Matching.png');
+  mazeImage = loadImage('MazeGame.png');
+  bugImage = loadImage('BugSquash.png');
+   
+  
+}
 
 
 let sidebarWidth = 45;
