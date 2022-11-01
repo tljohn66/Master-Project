@@ -1,5 +1,4 @@
 var game;
-
 let bgCol = 150;
 let leftWallX, leftWallY, leftWallW, leftWallH;
 let topWallX, topWallY, topWallW, topWallH;
@@ -9,24 +8,27 @@ let obsticle1X, obsticle1Y, obsticle1W, obsticle1H;
 let endX, endY, endW, endH;
 let canvasX = 500;
 let canvasY = 1100;
+let bx;
+let by;
+let boxSize = 20;
+let overBox = false;
+let locked = false;
+let xOffset = 0.0;
+let yOffset = 0.0;
 var lives = 1;
+var level = 0 +1;
+var points = 0;
 var levelCompleted = 0;
-let matchingImage, mazeImage, bugImage;
-
-function preload() {
-  matchingImage = loadImage('Matching.png');
-  bugImage = loadImage('BugSquash.png');
-   
-  
-}
-
-
 let sidebarWidth = 45;
 
 function setup() {
   game = 0;
   let cnv = createCanvas(canvasX, canvasY);
+  bx = 50;
+  by = 630;
   lives = 1;
+  
+  
 }
 
 //GUI
@@ -48,17 +50,15 @@ function draw() {
 
     menuOptions();   
     
-    
-
   } 
   
+  // Matching Game
   if(game == 1){
     let cnv = createCanvas(canvasX, canvasY);
     background(207, 223, 250);
     textSize(30);
     fill("black");
     text("Matching Game Coming Soon!", 30,900);
-       image(matchingImage, 80,660,300,200);
     
     mazeGameButtons();
 
@@ -66,104 +66,150 @@ function draw() {
 
   
 
-
+  // Maze Game
   if(game == 2){
-    let cnv = createCanvas(canvasX, canvasY);
-    background(207, 223, 250);
-    //Creates the wall of the maze
-    leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
-    topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
-    bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
-    rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
-    obsticle1X = 100; obsticle1Y = 660; obsticle1W = 350; obsticle1H = 300;
-    endX = 100, endY = 960; endW = 20; endH = 20;
     
-    fill(245,10,80);
-    rect(leftWallX, leftWallY, leftWallW, leftWallH);
+  
+    if(levelCompleted == 0){
+      let cnv = createCanvas(canvasX, canvasY);
+      background(207, 223, 250);
+      //Creates the wall of the maze
+      leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
+      topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
+      bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
+      rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
+      obsticle1X = 100; obsticle1Y = 660; obsticle1W = 350; obsticle1H = 300;
+      endX = 100, endY = 960; endW = 20; endH = 20;
 
-    fill(245,10,80);
-    rect(topWallX, topWallY, topWallW, topWallH);
+      fill(245,10,80);
+      rect(leftWallX, leftWallY, leftWallW, leftWallH);
 
-    fill(245,10,80);
-    rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
+      fill(245,10,80);
+      rect(topWallX, topWallY, topWallW, topWallH);
 
-    fill(245,10,80);
-    rect(rightWallX, rightWallY, rightWallW, rightWallH);
+      fill(245,10,80);
+      rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
 
-    fill(245, 10,80);
-    rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
+      fill(245,10,80);
+      rect(rightWallX, rightWallY, rightWallW, rightWallH);
 
-    fill(90);
-    rect(endX, endY, endW, endH);
+      fill(245, 10,80);
+      rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
 
-    fill(50);
-    textSize(30);
-    text("Lives:" + lives, 20,520,20);
+      fill(90);
+      rect(endX, endY, endW, endH);
 
-    
-    mazeGameButtons();
+      fill(50);
+      textSize(30);
+      text("Lives:" + lives, 20,520,20);
+      
+      fill(50);
+      textSize(30);
+      text("Level:" + level, 140,520,20); 
+      
+      fill(50);
+      textSize(30);
+      text("Points:" + points, 260,520,20)
 
-    if(isMouseInsideE(endX, endY, endW, endH)){
-      if(lives != 0){
-        fill(50);
-        textSize(50);
-        text("Winner!!!",190,830);
-        levelCompleted = 1;
+
+      mazeGameButtons();
+
+      if(isMouseInsideE(endX, endY, endW, endH)){
+        if(lives != 0){
+          fill(50);
+          textSize(50);
+          text("Winner!!!",190,830);
+          points = 100;
+        }
+        else{
+          fill(50);
+          textSize(50);
+          text("Loser!!!",190,830);
+          points = 0;
+        }
       }
-      else{
-        fill(50);
-        textSize(50);
-        text("Loser!!!",190,830);
+
+
+
+      if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
+        bgCol = 30;
+        lives = 0;
+      } 
+
+       if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if (
+        mouseX > bx - boxSize &&
+        mouseX < bx + boxSize &&
+        mouseY > by - boxSize &&
+        mouseY < by + boxSize
+      ) {
+        overBox = true;
+        if (!locked) {
+          stroke(255);
+          fill(244, 122, 158);
+        }
+      } else {
+        stroke(156, 39, 176);
+        fill(244, 122, 158);
+        overBox = false;
       }
+
+
+      strokeWeight(2);
+      rect(bx, by, boxSize, boxSize);
     }
-
-
-
-    if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
-      bgCol = 30;
-      lives = 0;
-    } 
     
-     if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
-      bgCol = 30;
-      lives = 0;
-      } 
-      
-    if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
-      bgCol = 30;
-      lives = 0;
-      } 
-      
-    if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
-      bgCol = 30;
-      lives = 0;
-      } 
+  if(levelCompleted == 1){
+    clear();
+    background(207, 223, 250);
+    textSize(30);
+    fill("black");
+    text("Levels coming soon!", 100,900);
     
-    if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
-      bgCol = 30;
-      lives = 0;
-      } 
-      
-
+    //mazegameLevel2();
+    
   }
-
+}
+  
+  //Bug Squash Game
   if(game == 3){
     let cnv = createCanvas(canvasX, canvasY);
     background(207, 223, 250);
     textSize(30);
     fill("black");
     text("Bug Squash Game Coming Soon!", 30,900);
-     image(bugImage, 80,660,300,200);
+    
     mazeGameButtons();
     
   }
+  
+  
 
 }
 
 
 function isMouseInsideE(x, y, w, h){
    if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
-
+   
     return true; 
 
    } else {
@@ -175,7 +221,8 @@ function isMouseInsideE(x, y, w, h){
 
 function isMouseInside(x, y, w, h){
    if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
-
+    bx = 50;
+    by = 630;
     return true; 
 
    } else {
@@ -210,22 +257,62 @@ function menuOptions(){
     button3.style("background-color","yellow");
     button3.mousePressed(game3);
 }
-
-function mazeGameButtons(){
-  menu = createButton('Menu');
+  //A function that creates 2 button for the maze game
+  function mazeGameButtons(){
+    menu = createButton('Menu');
     menu.position(80, 1040);
     menu.size(100,50)
     menu.style("font-size", "30px");
     menu.style("color","black");
     menu.mousePressed(setup);
-
+  
     next = createButton('Next');
     next.position(400, 1040);
     next.size(100,50)
     next.style("font-size", "30px");
     next.style("color","black");
-    next.mousePressed();
+    next.mousePressed(level1);
+    
+    reset = createButton('Reset')
+    reset.position(240, 1040);
+    reset.size(100,50)
+    reset.style("font-size", "30px");
+    reset.style("color","black");
+    reset.mousePressed(resetLevel);
+    
 }
+
+function mazegameLevel2(){
+    previous = createButton('Previous')
+    previous.position(220, 1040);
+    previous.size(140,50)
+    previous.style("font-size", "30px");
+    previous.style("color","black");
+    previous.mousePressed(prevLevel);
+}
+
+  //allows a movable box for the maze game.
+  function mousePressed() {
+    if (overBox) {
+      locked = true;
+      fill(255, 255, 255);
+    } else {
+      locked = false;
+    }
+    xOffset = mouseX - bx;
+    yOffset = mouseY - by;
+  }
+  
+    function mouseDragged() {
+    if (locked) {
+      bx = mouseX - xOffset;
+      by = mouseY - yOffset;
+    }
+  }
+
+  function mouseReleased() {
+    locked = false;
+  }
 
 
 function game1(){
@@ -239,6 +326,22 @@ function game2(){
 
 function game3(){
   game = 3;
+}
+
+function level1(){
+  levelCompleted = 1;
+  game2();
+  
+}
+
+function prevLevel(){
+  levelCompleted = 0;
+  game2();
+}
+
+function resetLevel(){
+  levelCompleted = 0;
+  game2();
 }
 
 
