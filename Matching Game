@@ -1,0 +1,168 @@
+var qmatch = 0;
+let pg;
+let lastClickedBox = 0;
+let boxesRemovedCount = 0;
+  let button1, button2, button3, button4, button5, button6, button7, button8;
+  let one,two,three,four,five,six,seven,eight;
+function setup() {
+  createCanvas(800, 800);
+
+  let col = "orange"
+  button1 = createButton('1');
+  button1.style('font-size', '32px');
+  button1.style('background-color', col);
+  button1.position(90, 150);
+  button1.size(100,100)
+  button1.mousePressed(box1);
+  
+  
+   button2 = createButton('2')
+  button2.style('font-size', '32px');
+  button2.style('background-color', col);
+  button2.position(210, 150);
+  button2.size(100,100)
+  button2.mousePressed(box2);
+  
+  button3 = createButton('3')
+  button3.style('font-size', '32px');
+  button3.style('background-color', col);
+  button3.position(330, 150);
+  button3.size(100,100)
+  button3.mousePressed(box3);
+    
+  button4 = createButton('4')
+  button4.style('font-size', '32px');
+  button4.style('background-color', col);
+  button4.position(450, 150);
+  button4.size(100,100)
+  button4.mousePressed(box4);
+  
+  button5 = createButton('5')
+  button5.style('font-size', '32px');
+  button5.style('background-color', col);
+  button5.position(90, 270);
+  button5.size(100,100);
+  button5.mousePressed(box5);
+  
+    button6 = createButton('6')
+  button6.style('font-size', '32px');
+  button6.style('background-color', col);
+  button6.position(210, 270);
+  button6.size(100,100);
+  button6.mousePressed(box6);
+  
+  button7 = createButton('7')
+  button7.style('font-size', '32px');
+  button7.style('background-color', col);
+  button7.position(330, 270);
+  button7.size(100,100);
+  button7.mousePressed(box7);
+    
+  button8 = createButton('8')
+  button8.style('font-size', '32px');
+  button8.style('background-color', col);
+  button8.position(450, 270);
+  button8.size(100,100);
+  button8.mousePressed(box8);
+}
+
+function draw() {
+  background(20);
+  
+  fill("green")
+  one = rect(90,150,100,100,5);
+  six = rect(210,270,100,100,5);
+  fill("red")
+  two = rect(210,150,100,100,5);
+  five = rect(90,270,100,100,5);
+  fill("yellow")
+  three = rect(330,150,100,100,5);
+  eight = rect(450,270,100,100,5);
+  fill("blue")
+  seven = rect(330,270,100,100,5);
+  four = rect(450,150,100,100,5);
+  
+   if (qmatch == 1){
+            fill("white")
+        textSize(50)
+        text("its a match!",300,500)
+   }
+  
+
+}
+
+  function box1() {
+    if (boxesRemovedCount<2){
+     button1.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=1;
+    }
+    else{
+    }
+  }
+
+ function box2() {
+    if (boxesRemovedCount<2){
+     button2.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=2;
+    }
+   else{}
+  }
+
+ function box3() {
+    if (boxesRemovedCount<2){
+     button3.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=3;
+    }
+   else{}
+  }
+
+ function box4() {
+    if (boxesRemovedCount<2){
+     button4.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=4;
+    }
+   else{}
+  }
+
+ function box5() {
+    if (boxesRemovedCount<2){
+     button5.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=5;
+    }
+   else{}
+  }
+
+ function box6() {
+    if (boxesRemovedCount<2){
+     button6.remove()
+     if(lastClickedBox == 1){
+        qmatch = 1;      } 
+    boxesRemovedCount+=1;
+      lastClickedBox=6;
+    }
+   else{}
+  }
+
+ function box7() {
+    if (boxesRemovedCount<2){
+     button7.remove()
+    boxesRemovedCount+=1;
+      lastClickedBox=7;
+    }
+   else{}
+  }
+
+ function box8() {
+    if (boxesRemovedCount<2){
+     button8.remove()
+      //if (lastClickedBox==)
+    boxesRemovedCount+=1;
+      lastClickedBox=8;
+    }
+   else{}
+  }
