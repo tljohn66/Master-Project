@@ -1,3 +1,7 @@
+var notMatching =0;
+var nMatching =0;
+var lives=3;
+var userScore = 0;
 var qmatch = 0;
 let pg;
 let lastClickedBox = 0;
@@ -64,10 +68,12 @@ function setup() {
   button8.position(450, 270);
   button8.size(100,100);
   button8.mousePressed(box8);
+  
 }
 
 function draw() {
   background(20);
+  let col = "orange"
   
   fill("green")
   one = rect(90,150,100,100,5);
@@ -82,87 +88,495 @@ function draw() {
   seven = rect(330,270,100,100,5);
   four = rect(450,150,100,100,5);
   
+  fill("white")
+        textSize(50)
+        text("User Score: " + userScore,90,50)
+  fill("white")
+        textSize(50)
+        text("Lives: " + lives,500,50)
+  
+  fill("white")
+        textSize(20)
+        text("Match two boxes to score points!\n Remember color locations!\nGood luck! :\)",90,90)
+  
    if (qmatch == 1){
             fill("white")
         textSize(50)
-        text("its a match!",300,500)
+        text("It's a boy!\nI mean it's a match!",200,500)
+     boxesRemovedCount=0
    }
+  
+   if (qmatch == 2){
+            fill("white")
+        textSize(50)
+        text("That's not a match, bro.",200,500)
+     boxesRemovedCount=0
+   }
+if (lives<=0){
+  background("teal")
+  button1.remove()
+  button2.remove()
+  button3.remove()
+  button4.remove()
+  button5.remove()
+  button6.remove()
+  button7.remove()
+  button8.remove()
+   fill("black")
+        textSize(50)
+        text("All lives lost!",200,250)
+        text("Final score: " + userScore,200,300)
+        textSize(80)
+        text("Game over, man!",100,400)
+}
+  if (nMatching==1) {
+    button1.remove()
+    button1 = createButton('1');
+  button1.style('font-size', '32px');
+  button1.style('background-color', col);
+  button1.position(90, 150);
+  button1.size(100,100)
+  button1.mousePressed(box1);
+    nMatching=0
+  }
+  
+   if (notMatching==1) {
+     button1.remove()
+  button1 = createButton('1');
+  button1.style('font-size', '32px');
+  button1.style('background-color', col);
+  button1.position(90, 150);
+  button1.size(100,100)
+  button1.mousePressed(box1);
+     lives-=1
+     notMatching=0
+  }
+  
+   if (nMatching==2) {
+     button2.remove()
+     button2 = createButton('2')
+  button2.style('font-size', '32px');
+  button2.style('background-color', col);
+  button2.position(210, 150);
+  button2.size(100,100)
+  button2.mousePressed(box2);
+    nMatching=0
+  }
+  
+  if (notMatching==2) {
+    button2.remove()
+    button2 = createButton('2')
+  button2.style('font-size', '32px');
+  button2.style('background-color', col);
+  button2.position(210, 150);
+  button2.size(100,100)
+  button2.mousePressed(box2);
+  notMatching=0
+    lives-=1
+  }
+  
+     if (nMatching==3) {
+       button3.remove()
+    button3 = createButton('3')
+  button3.style('font-size', '32px');
+  button3.style('background-color', col);
+  button3.position(330, 150);
+  button3.size(100,100)
+  button3.mousePressed(box3);
+    nMatching=0
+  }
+  
+  if (notMatching==3) {
+    button3.remove()
+   button3 = createButton('3')
+  button3.style('font-size', '32px');
+  button3.style('background-color', col);
+  button3.position(330, 150);
+  button3.size(100,100)
+  button3.mousePressed(box3);
+    notMatching=0
+  }
+  
+   if (nMatching==4) {
+     button4.remove()
+     button4 = createButton('4')
+  button4.style('font-size', '32px');
+  button4.style('background-color', col);
+  button4.position(450, 150);
+  button4.size(100,100)
+  button4.mousePressed(box4);
+    nMatching=0
+  }
+  
+  if (notMatching==4) {
+    button4.remove()
+   button4 = createButton('4')
+  button4.style('font-size', '32px');
+  button4.style('background-color', col);
+  button4.position(450, 150);
+  button4.size(100,100)
+  button4.mousePressed(box4);
+    notMatching=0
+    lives-=1
+  }
+  
+    if (nMatching==5) {
+      button5.remove()
+     button5 = createButton('5')
+  button5.style('font-size', '32px');
+  button5.style('background-color', col);
+  button5.position(90, 270);
+  button5.size(100,100);
+  button5.mousePressed(box5);
+    nMatching=0
+  }
+  
+  if (notMatching==5) {
+    button5.remove()
+   button5 = createButton('5')
+  button5.style('font-size', '32px');
+  button5.style('background-color', col);
+  button5.position(90, 270);
+  button5.size(100,100);
+  button5.mousePressed(box5);
+    notMatching=0
+    lives-=1
+  }
+  
+   if (nMatching==6) {
+     button6.remove()
+       button6 = createButton('6')
+  button6.style('font-size', '32px');
+  button6.style('background-color', col);
+  button6.position(210, 270);
+  button6.size(100,100);
+  button6.mousePressed(box6);
+    nMatching=0
+  }
+  
+  if (notMatching==6) {
+    button6.remove()
+    button6 = createButton('6')
+  button6.style('font-size', '32px');
+  button6.style('background-color', col);
+  button6.position(210, 270);
+  button6.size(100,100);
+  button6.mousePressed(box6);
+    notMatching=0
+    lives-=1
+  }
+  
+     if (nMatching==7) {
+       button7.remove()
+      button7 = createButton('7')
+  button7.style('font-size', '32px');
+  button7.style('background-color', col);
+  button7.position(330, 270);
+  button7.size(100,100);
+  button7.mousePressed(box7);
+    nMatching=0
+  }
+  
+  if (notMatching==7) {
+    button7.remove()
+  button7 = createButton('7')
+  button7.style('font-size', '32px');
+  button7.style('background-color', col);
+  button7.position(330, 270);
+  button7.size(100,100);
+  button7.mousePressed(box7);
+    notMatching=0
+    lives-=1
+  }
+  
+   if (nMatching==8) {
+     button8.remove()
+     button8 = createButton('8')
+  button8.style('font-size', '32px');
+  button8.style('background-color', col);
+  button8.position(450, 270);
+  button8.size(100,100);
+  button8.mousePressed(box8);
+    nMatching=0
+  }
+  
+  if (notMatching==8) {
+    button8.remove()
+ button8 = createButton('8')
+  button8.style('font-size', '32px');
+  button8.style('background-color', col);
+  button8.position(450, 270);
+  button8.size(100,100);
+  button8.mousePressed(box8);
+    notMatching=0
+    lives-=1
+  }
   
 
 }
 
   function box1() {
+    qmatch=0
     if (boxesRemovedCount<2){
      button1.remove()
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 6 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50}
+    else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=1;
-    }
-    else{
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=1 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=1 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=1 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=1 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=1 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=1 }
+          }
     }
   }
 
  function box2() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button2.remove()
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 5 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50} else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=2;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=2 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=2 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=2 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=2 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=2 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=2 }
+          }
     }
-   else{}
   }
 
  function box3() {
-    if (boxesRemovedCount<2){
+qmatch=0
+   if (boxesRemovedCount<2){
      button3.remove()
-    boxesRemovedCount+=1;
+     if(lastClickedBox == 8 && boxesRemovedCount ==1){
+        qmatch = 1;
+     userScore+=50}
+     else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=3;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=3 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=3 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=3 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=3 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=3 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=3 }
+          }
     }
-   else{}
   }
 
  function box4() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button4.remove()
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 7 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50}
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=4;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=4 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=4 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=4 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=4 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=4 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=4 }
+          }
     }
-   else{}
   }
 
  function box5() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button5.remove()
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 2 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50} 
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=5;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=5 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=5 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=5 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=5 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=5 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=5 }
+          }
     }
-   else{}
   }
 
  function box6() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button6.remove()
-     if(lastClickedBox == 1){
-        qmatch = 1;      } 
-    boxesRemovedCount+=1;
+     if(lastClickedBox == 1 && boxesRemovedCount ==1){
+        qmatch = 1;
+     userScore+=50}
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=6;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=6 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=6 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=6 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=6 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=6 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=6 }
+          }   
     }
-   else{}
   }
 
  function box7() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button7.remove()
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 4 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50}
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=7;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=7 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=7 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=7 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=7 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=7 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=7 }
+          }
+      
     }
-   else{}
   }
 
  function box8() {
+   qmatch=0
     if (boxesRemovedCount<2){
      button8.remove()
-      //if (lastClickedBox==)
-    boxesRemovedCount+=1;
+      if(lastClickedBox == 3 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50}
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=8;
+                                   }
+      else{ qmatch=8;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=8 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=8 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=8 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=8 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=8 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=8 }
+          }
+      
     }
-   else{}
+
   }
