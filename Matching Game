@@ -1,3 +1,5 @@
+var boxesMatched = 0;
+var end = false;
 var notMatching =0;
 var nMatching =0;
 var lives=3;
@@ -93,7 +95,14 @@ function draw() {
         text("User Score: " + userScore,90,50)
   fill("white")
         textSize(50)
-        text("Lives: " + lives,500,50)
+        text("Lives: ",500,50)
+       textSize(60)
+        if(lives==3){fill("green")
+                    text(lives, 645,52)}
+        if(lives==2){fill("yellow")
+                    text(lives, 645,52)}
+  if(lives==1){fill("red")
+                    text(lives, 645,52)}
   
   fill("white")
         textSize(20)
@@ -128,6 +137,26 @@ if (lives<=0){
         text("Final score: " + userScore,200,300)
         textSize(80)
         text("Game over, man!",100,400)
+}
+  if (boxesMatched==8){
+    end=true;
+  background("teal")
+  button1.remove()
+  button2.remove()
+  button3.remove()
+  button4.remove()
+  button5.remove()
+  button6.remove()
+  button7.remove()
+  button8.remove()
+   fill("black")
+        textSize(50)
+        text("Congrats I guess!",200,250)
+        if (lives==3){ if (lives==3 && end==true){noLoop(); userScore +=100;}
+                     text("No lives lost,\n you got a bonus!",120,100)}
+        text("Final score: " + userScore,200,300)
+        textSize(60)
+        text("Go back to the menu",80,400)
 }
   if (nMatching==1) {
     button1.remove()
@@ -195,6 +224,7 @@ if (lives<=0){
   button3.size(100,100)
   button3.mousePressed(box3);
     notMatching=0
+    lives-=1;
   }
   
    if (nMatching==4) {
@@ -312,7 +342,7 @@ if (lives<=0){
     lives-=1
   }
   
-
+ 
 }
 
   function box1() {
@@ -321,7 +351,9 @@ if (lives<=0){
      button1.remove()
       if(lastClickedBox == 6 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50}
+      userScore+=50
+      boxesMatched+=2;
+      }
     else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=1;
                                    }
@@ -354,7 +386,9 @@ if (lives<=0){
      button2.remove()
       if(lastClickedBox == 5 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50} else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      userScore+=50
+      boxesMatched+=2;
+      } else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=2;
                                    }
       else{ qmatch=2;
@@ -386,7 +420,9 @@ qmatch=0
      button3.remove()
      if(lastClickedBox == 8 && boxesRemovedCount ==1){
         qmatch = 1;
-     userScore+=50}
+     userScore+=50
+     boxesMatched+=2;
+     }
      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=3;
                                    }
@@ -419,7 +455,9 @@ qmatch=0
      button4.remove()
       if(lastClickedBox == 7 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50}
+      userScore+=50
+      boxesMatched+=2;
+      }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=4;
                                    }
@@ -452,7 +490,9 @@ qmatch=0
      button5.remove()
       if(lastClickedBox == 2 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50} 
+      userScore+=50
+      boxesMatched+=2;
+      } 
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=5;
                                    }
@@ -485,7 +525,9 @@ qmatch=0
      button6.remove()
      if(lastClickedBox == 1 && boxesRemovedCount ==1){
         qmatch = 1;
-     userScore+=50}
+     userScore+=50
+     boxesMatched+=2;
+     }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=6;
                                    }
@@ -518,7 +560,9 @@ qmatch=0
      button7.remove()
       if(lastClickedBox == 4 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50}
+      userScore+=50
+      boxesMatched+=2;
+      }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=7;
                                    }
@@ -552,7 +596,9 @@ qmatch=0
      button8.remove()
       if(lastClickedBox == 3 && boxesRemovedCount ==1){
         qmatch = 1;
-      userScore+=50}
+      userScore+=50
+      boxesMatched+=2;
+      }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=8;
                                    }
@@ -576,7 +622,7 @@ qmatch=0
             notMatching=5
          nMatching=8 }
           }
-      
+       //if (lives==3){userScore +=100;}
     }
 
   }
