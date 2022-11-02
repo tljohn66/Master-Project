@@ -5,8 +5,10 @@ let topWallX, topWallY, topWallW, topWallH;
 let bottomWallX, bottomWallY, bottomWallW, bottomWallH;
 let rightWallX, rightWallY, rightWallW, rightWallH;
 let obsticle1X, obsticle1Y, obsticle1W, obsticle1H;
+let obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1;
+let obsticle1X2, obsticle1Y2, obsticle1W2, obsticle1H2;
 let endX, endY, endW, endH;
-let canvasX = 500;
+let canvasX = 800;
 let canvasY = 1100;
 let bx;
 let by;
@@ -16,10 +18,11 @@ let locked = false;
 let xOffset = 0.0;
 let yOffset = 0.0;
 var lives = 1;
-var level = 0 +1;
+var level = 0 + 1;
 var points = 0;
 var levelCompleted = 0;
-let sidebarWidth = 45;
+var rates = 0;
+let sidebarWidth = 95;
 
 function setup() {
   game = 0;
@@ -27,6 +30,7 @@ function setup() {
   bx = 50;
   by = 630;
   lives = 1;
+  rates = 0;
   
   
 }
@@ -48,7 +52,13 @@ function draw() {
     fill(150)
     rect(15, 20, 15, 15);
 
-    menuOptions();   
+    menuOptions(); 
+    
+    if(rates == 1){
+      textSize(30);
+      text("Your ugly face doesn't deserve to rate us.", 160,900);
+      
+    }
     
   } 
   
@@ -71,7 +81,8 @@ function draw() {
     
   
     if(levelCompleted == 0){
-      let cnv = createCanvas(canvasX, canvasY);
+      level = 1;
+      cnv = createCanvas(canvasX, canvasY);
       background(207, 223, 250);
       //Creates the wall of the maze
       leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
@@ -109,7 +120,7 @@ function draw() {
       
       fill(50);
       textSize(30);
-      text("Points:" + points, 260,520,20)
+      text("Points:" + points, 260,520,20);
 
 
       mazeGameButtons();
@@ -179,14 +190,133 @@ function draw() {
     }
     
   if(levelCompleted == 1){
-    clear();
-    background(207, 223, 250);
-    textSize(30);
-    fill("black");
-    text("Levels coming soon!", 100,900);
+      level = 2;
+      cnv = createCanvas(canvasX, canvasY);
+      background(207, 223, 250);
+      //Creates the wall of the maze
+      leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
+      topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
+      bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
+      rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
+      obsticle1X = 100; obsticle1Y = 660; obsticle1W = 250; obsticle1H = 200;
+      obsticle1X1 = 380; obsticle1Y1 = 660; obsticle1W1 = 70; obsticle1H1 = 300;
+      obsticle1X2 = 200; obsticle1Y2 = 880; obsticle1W2 = 70; obsticle1H2 = 100;
+      endX = 100, endY = 960; endW = 20; endH = 20;
+
+      fill(245,10,80);
+      rect(leftWallX, leftWallY, leftWallW, leftWallH);
+
+      fill(245,10,80);
+      rect(topWallX, topWallY, topWallW, topWallH);
+
+      fill(245,10,80);
+      rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
+
+      fill(245,10,80);
+      rect(rightWallX, rightWallY, rightWallW, rightWallH);
+
+      fill(245, 10,80);
+      rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
     
-    //mazegameLevel2();
+      fill(245, 10,80);
+      rect(obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1);
     
+      fill(245, 10,80);
+      rect(obsticle1X2, obsticle1Y2, obsticle1W1, obsticle1H2);
+
+      fill(90);
+      rect(endX, endY, endW, endH);
+
+      fill(50);
+      textSize(30);
+      text("Lives:" + lives, 20,520,20);
+      
+      fill(50);
+      textSize(30);
+      text("Level:" + level, 140,520,20); 
+      
+      fill(50);
+      textSize(30);
+      text("Points:" + points, 260,520,20);
+
+
+      mazeGameButtons();
+
+      if(isMouseInsideE(endX, endY, endW, endH)){
+        if(lives != 0){
+          fill(50);
+          textSize(50);
+          text("Winner!!!",190,830);
+          points = 200;
+        }
+        else{
+          fill(50);
+          textSize(50);
+          text("Loser!!!",190,830);
+          points = 0;
+        }
+      }
+
+
+
+      if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
+        bgCol = 30;
+        lives = 0;
+      } 
+
+       if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
+        bgCol = 30;
+        lives = 0;
+        } 
+
+      if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
+        bgCol = 30;
+        lives = 0;
+        } 
+    
+      if(isMouseInside(obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1)){
+        bgCol = 30;
+        lives = 0;
+        }
+    
+      if(isMouseInside(obsticle1X2, obsticle1Y2, obsticle1W2, obsticle1H2)){
+        bgCol = 30;
+        lives = 0;
+        }
+
+      if (
+        mouseX > bx - boxSize &&
+        mouseX < bx + boxSize &&
+        mouseY > by - boxSize &&
+        mouseY < by + boxSize
+      ) {
+        overBox = true;
+        if (!locked) {
+          stroke(255);
+          fill(244, 122, 158);
+        }
+      } else {
+        stroke(156, 39, 176);
+        fill(244, 122, 158);
+        overBox = false;
+      }
+
+
+      strokeWeight(2);
+      rect(bx, by, boxSize, boxSize);
+    
+    
+    //mazegameLevel2(); 
   }
 }
   
@@ -237,34 +367,43 @@ function isMouseInside(x, y, w, h){
 //Menu Buttons for Matching Game, Maze Game, and Bug Squash
 function menuOptions(){
     buttonM = createButton('Matching Game');
-    buttonM.position(80, 80);
+    buttonM.position(280, 80);
     buttonM.size(300,50)
     buttonM.style("font-size", "30px");
     buttonM.style("background-color","lime");
     buttonM.mousePressed(game1);
   
     button2 = createButton('Maze Game');
-    button2.position(80, 250);
+    button2.position(280, 250);
     button2.size(300,50)
     button2.style("font-size", "30px");
     button2.style("background-color","cyan");
     button2.mousePressed(game2);
   
     button3 = createButton('Bug Squash');
-    button3.position(80, 420);
+    button3.position(280, 420);
     button3.size(300,50)
     button3.style("font-size", "30px");
     button3.style("background-color","yellow");
     button3.mousePressed(game3);
+  
+    menu = createButton('Menu');
+    menu.position(2, 10);
+    menu.size(90,50)
+    menu.style("font-size", "30px");
+    menu.style("color","black");
+    menu.mousePressed(setup); 
+  
+    rate = createButton("Rate");
+    rate.position(2, 80);
+    rate.size(90,50)
+    rate.style("font-size", "30px");
+    rate.style("color","black");
+    rate.mousePressed(rateUs); 
 }
   //A function that creates 2 button for the maze game
   function mazeGameButtons(){
-    menu = createButton('Menu');
-    menu.position(80, 1040);
-    menu.size(100,50)
-    menu.style("font-size", "30px");
-    menu.style("color","black");
-    menu.mousePressed(setup);
+    
   
     next = createButton('Next');
     next.position(400, 1040);
@@ -273,12 +412,12 @@ function menuOptions(){
     next.style("color","black");
     next.mousePressed(level1);
     
-    reset = createButton('Reset')
-    reset.position(240, 1040);
-    reset.size(100,50)
-    reset.style("font-size", "30px");
-    reset.style("color","black");
-    reset.mousePressed(resetLevel);
+    restart = createButton('Restart')
+    restart.position(240, 1040);
+    restart.size(120,50)
+    restart.style("font-size", "30px");
+    restart.style("color","black");
+    restart.mousePressed(resetLevel);
     
 }
 
@@ -321,7 +460,7 @@ function game1(){
 
 function game2(){
   game = 2;
-  lives =1;
+  lives = 1;
 }
 
 function game3(){
@@ -329,6 +468,8 @@ function game3(){
 }
 
 function level1(){
+  bx = 50;
+  by = 630;
   levelCompleted = 1;
   game2();
   
@@ -342,6 +483,10 @@ function prevLevel(){
 function resetLevel(){
   levelCompleted = 0;
   game2();
+}
+
+function rateUs(){
+  rates = 1;
 }
 
 
