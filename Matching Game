@@ -10,6 +10,14 @@ let lastClickedBox = 0;
 let boxesRemovedCount = 0;
   let button1, button2, button3, button4, button5, button6, button7, button8;
   let one,two,three,four,five,six,seven,eight;
+let endGameSound, gameOverSound, mismatchSound, matchSound;
+function preload() {
+  endGameSound = loadSound("Endgame.wav");
+  gameOverSound = loadSound("GameOver.wav");
+  mismatchSound = loadSound("Fart.wav");
+  matchSound = loadSound("Matchhh.wav");
+}
+
 function setup() {
   createCanvas(800, 800);
 
@@ -122,6 +130,7 @@ function draw() {
      boxesRemovedCount=0
    }
 if (lives<=0){
+  
   background("teal")
   button1.remove()
   button2.remove()
@@ -137,9 +146,13 @@ if (lives<=0){
         text("Final score: " + userScore,200,300)
         textSize(80)
         text("Game over, man!",100,400)
+  noLoop(); gameOverSound.play();
 }
   if (boxesMatched==8){
     end=true;
+    if (end=true){
+      noLoop(); endGameSound.play();
+    }
   background("teal")
   button1.remove()
   button2.remove()
@@ -178,6 +191,7 @@ if (lives<=0){
   button1.size(100,100)
   button1.mousePressed(box1);
      lives-=1
+     mismatchSound.play();
      notMatching=0
   }
   
@@ -202,6 +216,7 @@ if (lives<=0){
   button2.mousePressed(box2);
   notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
      if (nMatching==3) {
@@ -225,6 +240,7 @@ if (lives<=0){
   button3.mousePressed(box3);
     notMatching=0
     lives-=1;
+    mismatchSound.play();
   }
   
    if (nMatching==4) {
@@ -248,6 +264,7 @@ if (lives<=0){
   button4.mousePressed(box4);
     notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
     if (nMatching==5) {
@@ -271,6 +288,7 @@ if (lives<=0){
   button5.mousePressed(box5);
     notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
    if (nMatching==6) {
@@ -294,6 +312,7 @@ if (lives<=0){
   button6.mousePressed(box6);
     notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
      if (nMatching==7) {
@@ -317,11 +336,13 @@ if (lives<=0){
   button7.mousePressed(box7);
     notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
    if (nMatching==8) {
      button8.remove()
-     button8 = createButton('8')
+     
+ button8 = createButton('8');
   button8.style('font-size', '32px');
   button8.style('background-color', col);
   button8.position(450, 270);
@@ -332,7 +353,7 @@ if (lives<=0){
   
   if (notMatching==8) {
     button8.remove()
- button8 = createButton('8')
+  button8 = createButton('8');
   button8.style('font-size', '32px');
   button8.style('background-color', col);
   button8.position(450, 270);
@@ -340,6 +361,7 @@ if (lives<=0){
   button8.mousePressed(box8);
     notMatching=0
     lives-=1
+    mismatchSound.play();
   }
   
  
@@ -353,6 +375,7 @@ if (lives<=0){
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
+        matchSound.play();
       }
     else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=1;
@@ -388,7 +411,9 @@ if (lives<=0){
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
-      } else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+        matchSound.play();
+      }
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=2;
                                    }
       else{ qmatch=2;
@@ -422,6 +447,7 @@ qmatch=0
         qmatch = 1;
      userScore+=50
      boxesMatched+=2;
+       matchSound.play();
      }
      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=3;
@@ -457,6 +483,7 @@ qmatch=0
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
+        matchSound.play();
       }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=4;
@@ -492,6 +519,7 @@ qmatch=0
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
+        matchSound.play();
       } 
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=5;
@@ -527,6 +555,7 @@ qmatch=0
         qmatch = 1;
      userScore+=50
      boxesMatched+=2;
+       matchSound.play();
      }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=6;
@@ -562,6 +591,7 @@ qmatch=0
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
+        matchSound.play();
       }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=7;
@@ -598,11 +628,12 @@ qmatch=0
         qmatch = 1;
       userScore+=50
       boxesMatched+=2;
+        matchSound.play();
       }
       else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
       lastClickedBox=8;
                                    }
-      else{ qmatch=8;
+      else{ qmatch=2;
           if(lastClickedBox==1) {
             notMatching=1
          nMatching=8 }
