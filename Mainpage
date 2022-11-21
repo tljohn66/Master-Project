@@ -1,5 +1,20 @@
 var game;
+var removeNumber = 0;
 let bgCol = 150;
+let timeX = 760;
+let timeY = 990;
+let nameX = 120;
+let nameY = 990;
+let name1X = 400;
+let name1Y = 990;
+let name2X = 600;
+let name2Y = 990;
+var callMatchGame = 0;
+var callMazeGame = 0;
+var callBugGame = 0;
+var hiddenWall = 0;
+var gotPoints = 0;
+var playerWinner = 0;
 let leftWallX, leftWallY, leftWallW, leftWallH;
 let topWallX, topWallY, topWallW, topWallH;
 let bottomWallX, bottomWallY, bottomWallW, bottomWallH;
@@ -7,133 +22,547 @@ let rightWallX, rightWallY, rightWallW, rightWallH;
 let obsticle1X, obsticle1Y, obsticle1W, obsticle1H;
 let obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1;
 let obsticle1X2, obsticle1Y2, obsticle1W2, obsticle1H2;
+let buttonMatch, buttonMaze, buttonBug, rate, menu, next, restart, quit, settings;
 let endX, endY, endW, endH;
+let hiddenPoints;
 let canvasX = 800;
-let canvasY = 1100;
-let bx;
-let by;
+let canvasY = 1000;
+let playerX;
+let playerY;
 let boxSize = 20;
 let overBox = false;
 let locked = false;
 let xOffset = 0.0;
 let yOffset = 0.0;
-var lives = 1;
+var mazeLives = 3;
 var level = 0 + 1;
 var points = 0;
 var levelCompleted = 0;
 var rates = 0;
 let sidebarWidth = 95;
+var boxesMatched = 0;
+var end = false;
+var notMatching =0;
+var nMatching =0;
+var lives=3;
+var userScore = 0;
+var qmatch = 0;
+let pg;
+let lastClickedBox = 0;
+let boxesRemovedCount = 0;
+let button1, button2, button3, button4, button5, button6, button7, button8;
+let one,two,three,four,five,six,seven,eight;
+let endGameSound, gameOverSound, mismatchSound, matchSound;
 
-function setup() {
-  game = 0;
-  let cnv = createCanvas(canvasX, canvasY);
-  bx = 50;
-  by = 630;
-  lives = 1;
-  rates = 0;
-  
-  
+
+function preload() {
+  endGameSound = loadSound("Endgame.wav");
+  gameOverSound = loadSound("GameOver.wav");
+  mismatchSound = loadSound("Fart.wav");
+  matchSound = loadSound("Matchhh.wav");
 }
 
+
+function setup() {
+  
+  if(callMatchGame == 1){
+    menu.remove();
+    button1.remove();
+    button2.remove();
+    button3.remove();
+    button4.remove();
+    button5.remove();
+    button6.remove();
+    button7.remove();
+    button8.remove();
+  }
+  
+  if(callMazeGame == 1){
+    next.remove();
+    restart.remove();
+    menu.remove();
+    settings.remove();
+  }
+  
+  if(callBugGame  == 1){
+    menu.remove();
+  }
+  
+  menuOptions();
+  
+  let cnv = createCanvas(canvasX, canvasY);
+  playerX = 50;
+  playerY = 330;
+  mazeLives = 3;
+  rates = 0;
+  game = 0;
+  callMatchGame = 0;
+  callMazeGame = 0;
+  points = 0;
+  hiddenWall = 0;
+  
+}
 //GUI
 function draw() {
-  clear();
   if(game == 0){
-    background(207, 223, 250);
- 
+    background(18, 52, 86);
+    
+    //Time
+      let m = minute(); 
+      let h = hour();
+      textSize(30);
+      fill("white");
+      text(h + ":" + m, timeX, timeY);
+      text("Christopher", nameX, nameY);
+      text("Carlos", name1X, name1Y);
+      text("Tyler", name2X, name2Y);
+
+      nameX++;
+      name1X++;
+      name2X++;
+      timeX++;
+      
+    
+      if(nameX >= 800){
+        nameX = 0;
+      }
+      if(timeX >= 800){      
+        timeX = 0;
+      }
+      if(name1X >= 800){      
+        name1X = 0;
+      }
+      if(name2X >= 800){      
+        name2X = 0;
+      }
+      
+    
     //Sidebar, is at 0,0, with a width of sidebarWidth,and a length of the canvas
     //To-Do:
     //Move to own function.
     //generalize home icon position.
     //Have sidebar elements scroll with the screen.
+    fill(4, 24, 56);
     rect(0, 0, sidebarWidth, canvasY);
 
     //placeholder home icon
-    fill(150)
+    fill(37, 43, 74)
     rect(15, 20, 15, 15);
-
-    menuOptions(); 
-    
+  
     if(rates == 1){
+      fill("white");
       textSize(30);
-      text("Your ugly face doesn't deserve to rate us.", 160,900);
-      
+      text("You're ugly face doesn't deserve to rate us.", 160,900);
     }
     
   } 
   
   // Matching Game
   if(game == 1){
+    
     let cnv = createCanvas(canvasX, canvasY);
     background(207, 223, 250);
-    textSize(30);
-    fill("black");
-    text("Matching Game Coming Soon!", 30,900);
+    buttonMatch.remove();
+    buttonMaze.remove();
+    buttonBug.remove();
+    menu.style("background-color","orange");
+    menu.position(300,700);
+    rate.remove();
     
-    mazeGameButtons();
+    if(callMatchGame == 0){
+      matchGameButtons();
+      callMatchGame = 1;
+    }
+    
+    background(20);
+    let col = "orange"
 
-  }  
+    fill("green")
+    one = rect(90,150,100,100,5);
+    six = rect(210,270,100,100,5);
+    fill("red")
+    two = rect(210,150,100,100,5);
+    five = rect(90,270,100,100,5);
+    fill("yellow")
+    three = rect(330,150,100,100,5);
+    eight = rect(450,270,100,100,5);
+    fill("blue")
+    seven = rect(330,270,100,100,5);
+    four = rect(450,150,100,100,5);
+    fill("white");
+    textSize(50);
+    text("User Score: " + userScore,90,50);
+    fill("white");
+    textSize(50);
+    text("Lives: ",500,50);
+    textSize(60);
 
+    if(lives==3){
+      fill("green");
+      text(lives, 645,52);
+    }
+
+    if(lives==2){
+      fill("yellow");
+      text(lives, 645,52);
+    }
+
+    if(lives==1){
+      fill("red");
+      text(lives, 645,52);
+    }
+
+    fill("white");
+    textSize(20);
+    text("Match two boxes to score points!\n Remember color locations!\nGood luck! :\)",90,90);
+
+    if (qmatch == 1){
+      fill("white");
+      textSize(50);
+      text("It's a boy!\nI mean it's a match!",200,500);
+      boxesRemovedCount=0;
+     }
+
+    if (qmatch == 2){
+      fill("white");
+      textSize(50);
+      text("That's not a match, bro.",200,500);
+      boxesRemovedCount=0;
+     }
+    if (lives<=0){
+      background("teal")
+      button1.remove();
+      button2.remove();
+      button3.remove();
+      button4.remove();
+      button5.remove();
+      button6.remove();
+      button7.remove();
+      button8.remove();
+      fill("black");
+      textSize(50);
+      text("All lives lost!",200,250);
+      text("Final score: " + userScore,200,300);
+      textSize(80);
+      text("Game over, man!",100,400);
+      noLoop();
+      gameOverSound.play();
+    }
+    if (boxesMatched==8){
+      end=true;
+      if(end == true){
+        noLoop();
+        end = false;
+        endGameSound.play();
+      }
+      
+      background("teal")
+      button1.remove()
+      button2.remove()
+      button3.remove()
+      button4.remove()
+      button5.remove()
+      button6.remove()
+      button7.remove()
+      button8.remove()
+      fill("black");
+      textSize(50);
+      text("Congrats I guess!",200,250);
+    if (lives==3){ if (lives==3){
+      userScore = 300;
+    }
+      text("No lives lost,\n you got a bonus!",120,100)
+    }
+      text("Final score: " + userScore,200,300);
+      textSize(60);
+      text("Go back to the menu",80,400);
+  }
+    if (nMatching==1) {
+      button1.remove();
+      button1 = createButton('1');
+      button1.style('font-size', '32px');
+      button1.style('background-color', col);
+      button1.position(90, 150);
+      button1.size(100,100);
+      button1.mousePressed(box1);
+      nMatching=0;
+    }
+
+    if (notMatching==1) {
+      button1.remove()
+      button1 = createButton('1');
+      button1.style('font-size', '32px');
+      button1.style('background-color', col);
+      button1.position(90, 150);
+      button1.size(100,100);
+      button1.mousePressed(box1);
+      lives-=1;
+      notMatching=0;
+      mismatchSound.play();
+    }
+
+    if (nMatching==2) {
+      button2.remove()
+      button2 = createButton('2')
+      button2.style('font-size', '32px');
+      button2.style('background-color', col);
+      button2.position(210, 150);
+      button2.size(100,100);
+      button2.mousePressed(box2);
+      nMatching=0
+    }
+
+    if (notMatching==2) {
+      button2.remove()
+      button2 = createButton('2')
+      button2.style('font-size', '32px');
+      button2.style('background-color', col);
+      button2.position(210, 150);
+      button2.size(100,100);
+      button2.mousePressed(box2);
+      notMatching = 0
+      lives-=1
+      mismatchSound.play();
+    }
+
+    if (nMatching==3) {
+      button3.remove()
+      button3 = createButton('3')
+      button3.style('font-size', '32px');
+      button3.style('background-color', col);
+      button3.position(330, 150);
+      button3.size(100,100);
+      button3.mousePressed(box3);
+      nMatching=0
+    }
+
+    if (notMatching==3) {
+      button3.remove()
+      button3 = createButton('3')
+      button3.style('font-size', '32px');
+      button3.style('background-color', col);
+      button3.position(330, 150);
+      button3.size(100,100);
+      button3.mousePressed(box3);
+      notMatching=0
+      lives-=1;
+      mismatchSound.play();
+    }
+
+    if (nMatching==4) {
+      button4.remove()
+      button4 = createButton('4')
+      button4.style('font-size', '32px');
+      button4.style('background-color', col);
+      button4.position(450, 150);
+      button4.size(100,100);
+      button4.mousePressed(box4);
+      nMatching=0
+    }
+
+    if (notMatching==4) {
+      button4.remove()
+      button4 = createButton('4')
+      button4.style('font-size', '32px');
+      button4.style('background-color', col);
+      button4.position(450, 150);
+      button4.size(100,100);
+      button4.mousePressed(box4);
+      notMatching=0
+      lives-=1
+      mismatchSound.play();
+    }
+
+    if (nMatching==5) {
+      button5.remove()
+      button5 = createButton('5')
+      button5.style('font-size', '32px');
+      button5.style('background-color', col);
+      button5.position(90, 270);
+      button5.size(100,100);
+      button5.mousePressed(box5);
+      nMatching=0
+    }
+
+    if (notMatching==5) {
+      button5.remove()
+      button5 = createButton('5')
+      button5.style('font-size', '32px');
+      button5.style('background-color', col);
+      button5.position(90, 270);
+      button5.size(100,100);
+      button5.mousePressed(box5);
+      notMatching=0
+      lives-=1
+      mismatchSound.play();
+    }
+
+     if (nMatching==6) {
+      button6.remove()
+      button6 = createButton('6')
+      button6.style('font-size', '32px');
+      button6.style('background-color', col);
+      button6.position(210, 270);
+      button6.size(100,100);
+      button6.mousePressed(box6);
+      nMatching=0
+    }
+
+    if (notMatching==6) {
+      button6.remove()
+      button6 = createButton('6')
+      button6.style('font-size', '32px');
+      button6.style('background-color', col);
+      button6.position(210, 270);
+      button6.size(100,100);
+      button6.mousePressed(box6);
+      notMatching=0
+      lives-=1
+      mismatchSound.play();
+    }
+
+    if (nMatching==7) {
+      button7.remove()
+      button7 = createButton('7')
+      button7.style('font-size', '32px');
+      button7.style('background-color', col);
+      button7.position(330, 270);
+      button7.size(100,100);
+      button7.mousePressed(box7);
+      nMatching=0
+    }
+
+    if (notMatching==7) {
+      button7.remove()
+      button7 = createButton('7')
+      button7.style('font-size', '32px');
+      button7.style('background-color', col);
+      button7.position(330, 270);
+      button7.size(100,100);
+      button7.mousePressed(box7);
+      notMatching=0
+      lives-=1
+      mismatchSound.play();
+    }
+
+    if (nMatching==8) {
+      button8.remove()
+      button8 = createButton('8')
+      button8.style('font-size', '32px');
+      button8.style('background-color', col);
+      button8.position(450, 270);
+      button8.size(100,100);
+      button8.mousePressed(box8);
+      nMatching=0
+    }
+
+    if (notMatching==8) {
+      button8.remove()
+      button8 = createButton('8')
+      button8.style('font-size', '32px');
+      button8.style('background-color', col);
+      button8.position(450, 270);
+      button8.size(100,100);
+      button8.mousePressed(box8);
+      notMatching=0
+      lives-=1
+      mismatchSound.play();
+    }
+}  
   
 
   // Maze Game
   if(game == 2){
+    buttonMatch.remove();
+    buttonMaze.remove();
+    buttonBug.remove();
+    rate.remove();
+    menu.position(100,840);
     
+    if(callMazeGame == 0){
+      mazeGameButtons();
+      callMazeGame = 1;
+    }
+   
   
     if(levelCompleted == 0){
       level = 1;
       cnv = createCanvas(canvasX, canvasY);
-      background(207, 223, 250);
+      background("black");
       //Creates the wall of the maze
-      leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
-      topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
-      bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
-      rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
-      obsticle1X = 100; obsticle1Y = 660; obsticle1W = 350; obsticle1H = 300;
-      endX = 100, endY = 960; endW = 20; endH = 20;
+      leftWallX = 180; leftWallY = 380; leftWallW = 20; leftWallH = 340;
+      topWallX = 180; topWallY = 320; topWallW = 400; topWallH = 20;
+      bottomWallX = 200; bottomWallY = 700; bottomWallW = 400; bottomWallH = 20;
+      rightWallX = 580; rightWallY = 320; rightWallW = 20; rightWallH = 400;
+      obsticle1X = 200; obsticle1Y = 380; obsticle1W = 350; obsticle1H = 300;
+      hiddenBlockX = 180; hiddenBlockY = 340; hiddenBlockW = 20; hiddenBlockH = 40;
+      hiddenEndX = 0; hiddenEndY = 0; hiddenEndW = 20; hiddenEndH = 20;
+      endX = 200, endY = 680; endW = 20; endH = 20;
 
-      fill(245,10,80);
+      noStroke();
+      fill(7, 43, 74);
       rect(leftWallX, leftWallY, leftWallW, leftWallH);
 
-      fill(245,10,80);
+      fill(7, 43, 74);
       rect(topWallX, topWallY, topWallW, topWallH);
 
-      fill(245,10,80);
+      fill(7, 43, 74);
       rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
 
-      fill(245,10,80);
+      fill(7, 43, 74);
       rect(rightWallX, rightWallY, rightWallW, rightWallH);
 
-      fill(245, 10,80);
+      fill(7, 43, 74);
       rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
+      
+      fill(40);
+      rect(hiddenEndX, hiddenEndY, hiddenEndW, hiddenEndH);
 
-      fill(90);
+      fill("red");
       rect(endX, endY, endW, endH);
-
-      fill(50);
-      textSize(30);
-      text("Lives:" + lives, 20,520,20);
       
-      fill(50);
-      textSize(30);
-      text("Level:" + level, 140,520,20); 
+      if(hiddenWall == 1){
+        fill(7, 43, 74);
+        rect(hiddenBlockX, hiddenBlockY, hiddenBlockW, hiddenBlockH);
+        
+        if(isPlayerInside(hiddenBlockX, hiddenBlockY, hiddenBlockW, hiddenBlockH)){
+          bgCol = 30;
+          playerX = 220;
+          playerY = 350; 
+          mazeLives--;
+      }
+        
+      }
+
+      fill("Orange");
+      textSize(40);
+      text("Lives:" + mazeLives, 20,20,20);
       
-      fill(50);
-      textSize(30);
-      text("Points:" + points, 260,520,20);
+      fill("orange");
+      textSize(40);
+      text("Level:" + level, 340,20,20); 
+      
+      fill("orange");
+      textSize(40);
+      text("Points:" + points, 600,20,20);
 
 
-      mazeGameButtons();
+      fill("orange");
+      textSize(25);
+      text("(: Use the arrow keys to move the box to the end of the maze. :)\n \t\t\t\t\t\t\t\t\t\t\t\t\t P.S. don't touch the walls.",40,200);
+      
 
-      if(isMouseInsideE(endX, endY, endW, endH)){
-        if(lives != 0){
-          fill(50);
+      if(isPlayerInsideE(endX, endY, endW, endH)){
+        if(mazeLives != 0){
+          fill("orange");
           textSize(50);
           text("Winner!!!",190,830);
-          points = 100;
+          points += 100;
+          levelCompleted = 1;
+          matchSound.play();
         }
         else{
-          fill(50);
+          fill("orange");
           textSize(50);
           text("Loser!!!",190,830);
           points = 0;
@@ -142,36 +571,72 @@ function draw() {
 
 
 
-      if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
+      if(isPlayerInside(leftWallX, leftWallY, leftWallW, leftWallH)){
         bgCol = 30;
-        lives = 0;
+        mazeLives--;
+        playerX = 220;
+        playerY = 350;
       } 
 
-       if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
+      if(isPlayerInside(topWallX, topWallY, topWallW, topWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 220;
+        playerY = 350;
+      } 
 
-      if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
+      if(isPlayerInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 220;
+        playerY = 350;
+      } 
 
-      if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
+      if(isPlayerInside(rightWallX, rightWallY, rightWallW, rightWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 220;
+        playerY = 350;
+      } 
 
-      if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
+      if(isPlayerInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 220;
+        playerY = 350;
+      } 
+      
+      if(isPlayerInside(hiddenEndX, hiddenEndY, hiddenEndW, hiddenEndH)){
+        bgCol = 30;
+        playerX = 220;
+        playerY = 350; 
+        points += 100;
+        hiddenWall = 1;
+      } 
+      
+        
+      
+      
+      if(mazeLives == 0){
+        clear();
+        next.remove();
+        restart.remove();
+        background("black");
+        playerX = 0;
+        playerY = 0;
+        
+        textSize(50);
+        fill("orange");
+        text("You have no lives left", 10, 300)
+        text("Points: "+ points+ " / 500", 20,500);
+        
+      }
 
-      if (
-        mouseX > bx - boxSize &&
-        mouseX < bx + boxSize &&
-        mouseY > by - boxSize &&
-        mouseY < by + boxSize
+      /*if (
+        mouseX > playerX - boxSize &&
+        mouseX < playerX + boxSize &&
+        mouseY > playerY - boxSize &&
+        mouseY < playerY + boxSize
       ) {
         overBox = true;
         if (!locked) {
@@ -182,72 +647,106 @@ function draw() {
         stroke(156, 39, 176);
         fill(244, 122, 158);
         overBox = false;
-      }
+      }*/
 
 
       strokeWeight(2);
-      rect(bx, by, boxSize, boxSize);
+      player = rect(playerX, playerY, boxSize, boxSize);
+      
+       if (keyIsDown(RIGHT_ARROW)) {
+         playerX = playerX + 2;  //move right
+       }
+       if (keyIsDown(LEFT_ARROW)) {
+         playerX = playerX - 2;  //move left
+       }
+       if (keyIsDown(UP_ARROW)) {
+         playerY = playerY - 2;  //move up by 10 pixels
+       }
+       if (keyIsDown(DOWN_ARROW)) {
+         playerY = playerY + 2;  //move down by 10 pixels
+       }
     }
     
   if(levelCompleted == 1){
       level = 2;
       cnv = createCanvas(canvasX, canvasY);
-      background(207, 223, 250);
+      background("black");
       //Creates the wall of the maze
-      leftWallX = 80; leftWallY = 660; leftWallW = 20; leftWallH = 340;
-      topWallX = 80; topWallY = 600; topWallW = 400; topWallH = 20;
-      bottomWallX = 100; bottomWallY = 980; bottomWallW = 400; bottomWallH = 20;
-      rightWallX = 480; rightWallY = 600; rightWallW = 20; rightWallH = 400;
-      obsticle1X = 100; obsticle1Y = 660; obsticle1W = 250; obsticle1H = 200;
-      obsticle1X1 = 380; obsticle1Y1 = 660; obsticle1W1 = 70; obsticle1H1 = 300;
-      obsticle1X2 = 200; obsticle1Y2 = 880; obsticle1W2 = 70; obsticle1H2 = 100;
-      endX = 100, endY = 960; endW = 20; endH = 20;
+      leftWallX = 150; leftWallY = 320; leftWallW = 20; leftWallH = 450;
+      topWallX = 160; topWallY = 320; topWallW = 420; topWallH = 20;
+      bottomWallX = 170; bottomWallY = 750; bottomWallW = 410; bottomWallH = 20;
+      rightWallX = 580; rightWallY = 320; rightWallW = 20; rightWallH = 450;
+      obsticle1X = 190; obsticle1Y = 380; obsticle1W = 250; obsticle1H = 200;
+      obsticle2X = 440; obsticle2Y = 380; obsticle2W = 70; obsticle2H = 330;
+      obsticle3X = 300; obsticle3Y = 580; obsticle3W = 80; obsticle3H = 100;
+      obsticle4X = 240; obsticle4Y = 650; obsticle4W = 40; obsticle4H = 100;
+      obsticle5X = 510; obsticle5Y = 500; obsticle5W = 50; obsticle5H = 100;
+      obsticle6X = 170; obsticle6Y = 520; obsticle6W = 20; obsticle6H = 20;
+      hiddenBlock1X = 380; hiddenBlock1Y = 580; hiddenBlock1W = 20; hiddenBlock1H = 20;
+      endX = 170, endY = 500; endW = 20; endH = 20;
 
-      fill(245,10,80);
+      noStroke();
+      fill("white");
       rect(leftWallX, leftWallY, leftWallW, leftWallH);
 
-      fill(245,10,80);
+      fill("white");
       rect(topWallX, topWallY, topWallW, topWallH);
 
-      fill(245,10,80);
+      fill("white");
       rect(bottomWallX, bottomWallY, bottomWallW, bottomWallH);
 
-      fill(245,10,80);
+      fill("white");
       rect(rightWallX, rightWallY, rightWallW, rightWallH);
 
-      fill(245, 10,80);
+      fill("white");
       rect(obsticle1X, obsticle1Y, obsticle1W, obsticle1H);
     
-      fill(245, 10,80);
-      rect(obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1);
+      fill("white");
+      rect(obsticle2X, obsticle2Y, obsticle2W, obsticle2H);
     
-      fill(245, 10,80);
-      rect(obsticle1X2, obsticle1Y2, obsticle1W1, obsticle1H2);
+      fill("white");
+      rect(obsticle3X, obsticle3Y, obsticle3W, obsticle3H);
+    
+      fill("white");
+      rect(obsticle4X, obsticle4Y, obsticle4W, obsticle4H);
+      
+      fill("white");
+      rect(obsticle5X, obsticle5Y, obsticle5W, obsticle5H);
+      
+      fill("white");
+      rect(obsticle6X, obsticle6Y, obsticle6W, obsticle6H);
+    
+      fill(30);
+      hiddenPoints = rect(hiddenBlock1X, hiddenBlock1Y, hiddenBlock1W, hiddenBlock1H);
 
-      fill(90);
+      fill("red");
       rect(endX, endY, endW, endH);
 
-      fill(50);
-      textSize(30);
-      text("Lives:" + lives, 20,520,20);
+      fill("white");
+      textSize(40);
+      text("Lives:" + mazeLives, 20,20,20);
       
-      fill(50);
-      textSize(30);
-      text("Level:" + level, 140,520,20); 
+      fill("white");
+      textSize(40);
+      text("Level:" + level, 340,20,20); 
       
-      fill(50);
-      textSize(30);
-      text("Points:" + points, 260,520,20);
+      fill("white");
+      textSize(40);
+      text("Points:" + points, 600,20,20);
 
+      if(playerWinner == 1){
+        fill("orange");
+        textSize(50);
+        text("Winner!!!",240,250);
+      } 
 
-      mazeGameButtons();
-
-      if(isMouseInsideE(endX, endY, endW, endH)){
-        if(lives != 0){
-          fill(50);
-          textSize(50);
-          text("Winner!!!",190,830);
-          points = 200;
+      if(isPlayerInsideE(endX, endY, endW, endH)){
+        if(mazeLives != 0){
+          points += 100;
+          endSound();
+          playerWinner = 1;
+          
+          
         }
         else{
           fill(50);
@@ -256,49 +755,122 @@ function draw() {
           points = 0;
         }
       }
-
-
-
-      if(isMouseInside(leftWallX, leftWallY, leftWallW, leftWallH)){
+    
+      
+      if(isPlayerInside(leftWallX, leftWallY, leftWallW, leftWallH)){
         bgCol = 30;
-        lives = 0;
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
       } 
 
-       if(isMouseInside(topWallX, topWallY, topWallW, topWallH)){
+      if(isPlayerInside(topWallX, topWallY, topWallW, topWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      } 
 
-      if(isMouseInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
+      if(isPlayerInside(bottomWallX, bottomWallY, bottomWallW, bottomWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      } 
 
-      if(isMouseInside(rightWallX, rightWallY, rightWallW, rightWallH)){
+      if(isPlayerInside(rightWallX, rightWallY, rightWallW, rightWallH)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      } 
 
-      if(isMouseInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
+      if(isPlayerInside(obsticle1X, obsticle1Y, obsticle1W, obsticle1H)){
         bgCol = 30;
-        lives = 0;
-        } 
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      } 
     
-      if(isMouseInside(obsticle1X1, obsticle1Y1, obsticle1W1, obsticle1H1)){
+      if(isPlayerInside(obsticle2X, obsticle2Y, obsticle2W, obsticle2H)){
         bgCol = 30;
-        lives = 0;
-        }
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      }
     
-      if(isMouseInside(obsticle1X2, obsticle1Y2, obsticle1W2, obsticle1H2)){
+      if(isPlayerInside(obsticle3X, obsticle3Y, obsticle3W, obsticle3H)){
         bgCol = 30;
-        lives = 0;
-        }
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      }
+    
+      if(isPlayerInside(obsticle4X, obsticle4Y, obsticle4W, obsticle4H)){
+        bgCol = 30;
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      }
+    
+      if(isPlayerInside(obsticle5X, obsticle5Y, obsticle5W, obsticle5H)){
+        bgCol = 30;
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      }
+    
+      if(isPlayerInside(obsticle6X, obsticle6Y, obsticle6W, obsticle6H)){
+        bgCol = 30;
+        mazeLives--;
+        playerX = 200;
+        playerY = 680;
+      }
+    
+       if(isPlayerInside(hiddenBlock1X, hiddenBlock1Y, hiddenBlock1W, hiddenBlock1H)){
+        bgCol = 30;
+        playerX = 200;
+        playerY = 680;
+        pointsGot();     
+      }
+    
+      if(mazeLives == 0){
+        clear();
+        next.remove();
+        restart.remove();
+        background("black");
+        playerX = 0;
+        playerY = 0;
+        
+        textSize(50);
+        fill("orange");
+        text("You have no lives left", 10, 300)
+        text("Points: "+ points + " / 500", 20,500);
+      }
+    
+    
+      strokeWeight(2);
+      fill("orange");
+      rect(playerX, playerY, boxSize, boxSize);
+    
+      if (keyIsDown(RIGHT_ARROW)) {
+        playerX = playerX + 2;  //move right
+      }
+      if (keyIsDown(LEFT_ARROW)) {
+        playerX = playerX - 2;  //move left
+      }
+      if (keyIsDown(UP_ARROW)) {
+        playerY = playerY - 2;  //move up by 10 pixels
+      }
+      if (keyIsDown(DOWN_ARROW)) {
+        playerY = playerY + 2;  //move down by 10 pixels
+      }
 
-      if (
-        mouseX > bx - boxSize &&
-        mouseX < bx + boxSize &&
-        mouseY > by - boxSize &&
-        mouseY < by + boxSize
+      /*if (
+        mouseX > playerX - boxSize &&
+        mouseX < palyerX + boxSize &&
+        mouseY > playerY - boxSize &&
+        mouseY < playerY + boxSize
       ) {
         overBox = true;
         if (!locked) {
@@ -309,12 +881,10 @@ function draw() {
         stroke(156, 39, 176);
         fill(244, 122, 158);
         overBox = false;
-      }
+      }*/
 
 
-      strokeWeight(2);
-      rect(bx, by, boxSize, boxSize);
-    
+      
     
     //mazegameLevel2(); 
   }
@@ -322,23 +892,43 @@ function draw() {
   
   //Bug Squash Game
   if(game == 3){
+    buttonMatch.remove();
+    buttonMaze.remove();
+    buttonBug.remove();
+    rate.remove();
+    if(callBugGame == 0){
+      callBugGame = 1;
+    }
+    
+    
     let cnv = createCanvas(canvasX, canvasY);
     background(207, 223, 250);
     textSize(30);
     fill("black");
-    text("Bug Squash Game Coming Soon!", 30,900);
-    
-    mazeGameButtons();
+    text("Bug Squash Game Coming Soon!", 30,400);
     
   }
   
-  
+  /*if(game == 4){
+    background("black");
+    next.remove();
+    restart.remove();
+    settings.remove();
+    
+    if(sliders == 1){
+    playerSizeSlider = createSlider(20, 40, 20)
+    playerSizeSlider.position(300, 200)
+    playerSizeSlider.size(200, 300)
+    sliders++;
+    }
+    
+  }*/
 
 }
 
 
-function isMouseInsideE(x, y, w, h){
-   if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
+function isPlayerInsideE(x, y, w, h){
+   if(playerX > x && playerX < x+w && playerY > y && playerY < y + h){
    
     return true; 
 
@@ -349,11 +939,11 @@ function isMouseInsideE(x, y, w, h){
 
 }
 
-function isMouseInside(x, y, w, h){
-   if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y + h){
-    bx = 50;
-    by = 630;
-    return true; 
+function isPlayerInside(x, y, w, h){
+   if(playerX > x && playerX < x+w && playerY > y && playerY < y + h){
+     playerX = 50;
+     playerY = 330;
+     return true; 
 
    } else {
 
@@ -366,101 +956,101 @@ function isMouseInside(x, y, w, h){
 
 //Menu Buttons for Matching Game, Maze Game, and Bug Squash
 function menuOptions(){
-    buttonM = createButton('Matching Game');
-    buttonM.position(280, 80);
-    buttonM.size(300,50)
-    buttonM.style("font-size", "30px");
-    buttonM.style("background-color","lime");
-    buttonM.mousePressed(game1);
+  strokeWeight(7);
+  stroke(50);
   
-    button2 = createButton('Maze Game');
-    button2.position(280, 250);
-    button2.size(300,50)
-    button2.style("font-size", "30px");
-    button2.style("background-color","cyan");
-    button2.mousePressed(game2);
-  
-    button3 = createButton('Bug Squash');
-    button3.position(280, 420);
-    button3.size(300,50)
-    button3.style("font-size", "30px");
-    button3.style("background-color","yellow");
-    button3.mousePressed(game3);
-  
-    menu = createButton('Menu');
-    menu.position(2, 10);
-    menu.size(90,50)
-    menu.style("font-size", "30px");
-    menu.style("color","black");
-    menu.mousePressed(setup); 
-  
-    rate = createButton("Rate");
-    rate.position(2, 80);
-    rate.size(90,50)
-    rate.style("font-size", "30px");
-    rate.style("color","black");
-    rate.mousePressed(rateUs); 
+  buttonMatch = createButton('Matching Game');
+  buttonMatch.position(280, 180);
+  buttonMatch.size(300,50)
+  buttonMatch.style("font-size", "30px");
+  buttonMatch.style("background-color","lime");
+  buttonMatch.mousePressed(game1);
+
+  buttonMaze = createButton('Maze Game');
+  buttonMaze.position(280, 350);
+  buttonMaze.size(300,50)
+  buttonMaze.style("font-size", "30px");
+  buttonMaze.style("background-color","cyan");
+  buttonMaze.mousePressed(game2);
+
+  buttonBug = createButton('Bug Squash');
+  buttonBug.position(280, 520);
+  buttonBug.size(300,50)
+  buttonBug.style("font-size", "30px");
+  buttonBug.style("background-color","yellow");
+  buttonBug.mousePressed(game3);
+
+  menu = createButton('Menu');
+  menu.position(2, 950);
+  menu.size(90,50)
+  menu.style("font-size", "30px");
+  menu.style("color","black");
+  menu.mousePressed(setup); 
+
+  rate = createButton("Rate");
+  rate.position(2, 50);
+  rate.size(90,50)
+  rate.style("font-size", "30px");
+  rate.style("color","black");
+  rate.mousePressed(rateUs); 
 }
   //A function that creates 2 button for the maze game
-  function mazeGameButtons(){
-    
-  
-    next = createButton('Next');
-    next.position(400, 1040);
-    next.size(100,50)
-    next.style("font-size", "30px");
-    next.style("color","black");
-    next.mousePressed(level1);
-    
-    restart = createButton('Restart')
-    restart.position(240, 1040);
-    restart.size(120,50)
-    restart.style("font-size", "30px");
-    restart.style("color","black");
-    restart.mousePressed(resetLevel);
-    
-}
+function mazeGameButtons(){
+  next = createButton('Next');
+  next.position(410, 840);
+  next.size(100,50)
+  next.style("font-size", "30px");
+  next.style("color","black");
+  next.mousePressed(level1);
 
-function mazegameLevel2(){
-    previous = createButton('Previous')
-    previous.position(220, 1040);
-    previous.size(140,50)
-    previous.style("font-size", "30px");
-    previous.style("color","black");
-    previous.mousePressed(prevLevel);
+  restart = createButton('Restart')
+  restart.position(240, 840);
+  restart.size(120,50)
+  restart.style("font-size", "30px");
+  restart.style("color","black");
+  restart.mousePressed(resetLevel);
+  
+  settings = createButton('Settings');
+  settings.position(560, 840);
+  settings.size(130, 50);
+  settings.style("font-size", "30px");
+  settings.style("color","black");
+  settings.mousePressed(mazeGameSettings);
 }
 
   //allows a movable box for the maze game.
-  function mousePressed() {
+  /*function mousePressed() {
     if (overBox) {
       locked = true;
       fill(255, 255, 255);
     } else {
       locked = false;
     }
-    xOffset = mouseX - bx;
-    yOffset = mouseY - by;
+    xOffset = mouseX - x;
+    yOffset = mouseY - y;
   }
   
     function mouseDragged() {
     if (locked) {
-      bx = mouseX - xOffset;
-      by = mouseY - yOffset;
+      x = mouseX - xOffset;
+      y = mouseY - yOffset;
     }
   }
 
   function mouseReleased() {
     locked = false;
-  }
+  }*/
 
 
 function game1(){
   game = 1;
+  removeNumber = 1;
 }
 
 function game2(){
   game = 2;
-  lives = 1;
+  mazeLives = 3;
+  removeNumber = 2;
 }
 
 function game3(){
@@ -468,26 +1058,403 @@ function game3(){
 }
 
 function level1(){
-  bx = 50;
-  by = 630;
+  playerX = 200;
+  playerY = 680;
   levelCompleted = 1;
   game2();
   
 }
 
 function prevLevel(){
+  previous.remove();
   levelCompleted = 0;
   game2();
+  
 }
 
 function resetLevel(){
   levelCompleted = 0;
+  playerX = 140;
+  playerY = 350;
   game2();
+}
+
+function mazeGameSettings(){
+  game = 4;
+  sliders = 1;
+}
+
+function GameSettings(){
+  
 }
 
 function rateUs(){
   rates = 1;
 }
+
+function endSound(){
+  endGameSound.play();
+  playerX = 200;
+  playerY = 280;
+}
+
+function pointsGot(){
+  if(gotPoints == 0){
+    points += 100;
+    gotPoints++;
+  }
+}
+
+
+function matchGameButtons(){
+  let col = "orange";
+    button1 = createButton('1');
+    button1.style('font-size', '32px');
+    button1.style('background-color', col);
+    button1.position(90, 150);
+    button1.size(100,100)
+    button1.mousePressed(box1);
+
+
+    button2 = createButton('2')
+    button2.style('font-size', '32px');
+    button2.style('background-color', col);
+    button2.position(210, 150);
+    button2.size(100,100);
+    button2.mousePressed(box2);
+
+    button3 = createButton('3')
+    button3.style('font-size', '32px');
+    button3.style('background-color', col);
+    button3.position(330, 150);
+    button3.size(100,100)
+    button3.mousePressed(box3);
+
+    button4 = createButton('4')
+    button4.style('font-size', '32px');
+    button4.style('background-color', col);
+    button4.position(450, 150);
+    button4.size(100,100)
+    button4.mousePressed(box4);
+
+    button5 = createButton('5')
+    button5.style('font-size', '32px');
+    button5.style('background-color', col);
+    button5.position(90, 270);
+    button5.size(100,100);
+    button5.mousePressed(box5);
+
+    button6 = createButton('6')
+    button6.style('font-size', '32px');
+    button6.style('background-color', col);
+    button6.position(210, 270);
+    button6.size(100,100);
+    button6.mousePressed(box6);
+
+    button7 = createButton('7')
+    button7.style('font-size', '32px');
+    button7.style('background-color', col);
+    button7.position(330, 270);
+    button7.size(100,100);
+    button7.mousePressed(box7);
+
+    button8 = createButton('8')
+    button8.style('font-size', '32px');
+    button8.style('background-color', col);
+    button8.position(450, 270);
+    button8.size(100,100);
+    button8.mousePressed(box8);
+  
+}
+function box1() {
+    qmatch=0
+    if (boxesRemovedCount<2){
+     button1.remove()
+      if(lastClickedBox == 6 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      }
+    else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=1;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=1 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=1 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=1 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=1 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=1 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=1 }
+          }
+    }
+  }
+
+ function box2() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button2.remove()
+      if(lastClickedBox == 5 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      } else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=2;
+                                }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=2 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=2 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=2 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=2 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=2 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=2 }
+          }
+    }
+  }
+
+ function box3() {
+qmatch=0
+   if (boxesRemovedCount<2){
+     button3.remove()
+     if(lastClickedBox == 8 && boxesRemovedCount ==1){
+        qmatch = 1;
+     userScore+=50
+     boxesMatched+=2;
+       matchSound.play();
+     }
+     else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=3;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=3 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=3 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=3 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=3 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=3 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=3 }
+          }
+    }
+  }
+
+ function box4() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button4.remove()
+      if(lastClickedBox == 7 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      }
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=4;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=4 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=4 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=4 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=4 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=4 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=4 }
+          }
+    }
+  }
+
+ function box5() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button5.remove()
+      if(lastClickedBox == 2 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      } 
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=5;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=5 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=5 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=5 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=5 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=5 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=5 }
+          }
+    }
+  }
+
+ function box6() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button6.remove()
+     if(lastClickedBox == 1 && boxesRemovedCount ==1){
+        qmatch = 1;
+     userScore+=50
+     boxesMatched+=2;
+       matchSound.play();
+     }
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=6;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=6 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=6 }
+           if(lastClickedBox==4) {
+            notMatching=4
+         nMatching=6 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=6 }
+           if(lastClickedBox==7) {
+            notMatching=7
+         nMatching=6 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=6 }
+          }   
+    }
+  }
+
+ function box7() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button7.remove()
+      if(lastClickedBox == 4 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      }
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=7;
+                                   }
+      else{ qmatch=2;
+          if(lastClickedBox==1) {
+            notMatching=1
+         nMatching=7 }
+           if(lastClickedBox==3) {
+            notMatching=3
+         nMatching=7 }
+           if(lastClickedBox==2) {
+            notMatching=2
+         nMatching=7 }
+           if(lastClickedBox==6) {
+            notMatching=6
+         nMatching=7 }
+           if(lastClickedBox==5) {
+            notMatching=5
+         nMatching=7 }
+           if(lastClickedBox==8) {
+            notMatching=8
+         nMatching=7 }
+          }
+
+    }
+  }
+
+ function box8() {
+   qmatch=0
+    if (boxesRemovedCount<2){
+     button8.remove()
+      if(lastClickedBox == 3 && boxesRemovedCount ==1){
+        qmatch = 1;
+      userScore+=50
+      boxesMatched+=2;
+        matchSound.play();
+      }
+      else if (boxesRemovedCount==0) {boxesRemovedCount+=1;
+      lastClickedBox=8;
+                                   }
+      else{ qmatch=8;
+          if(lastClickedBox==1) {
+            notMatching=1
+            nMatching=8 }
+           if(lastClickedBox==2) {
+            notMatching=2
+            nMatching=8 }
+           if(lastClickedBox==4) {
+            notMatching=4
+            nMatching=8 }
+           if(lastClickedBox==6) {
+            notMatching=6
+            nMatching=8 }
+           if(lastClickedBox==7) {
+            notMatching=7
+            nMatching=8 }
+           if(lastClickedBox==5) {
+            notMatching=5
+            nMatching=8 }
+          }
+       //if (lives==3){userScore +=100;}
+    }
+ }
+
 
 
 
