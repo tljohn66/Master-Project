@@ -1,0 +1,191 @@
+var gameStart = true;
+var changeBackground = false;
+
+var canvasX = 400;
+var canvasY = 400;
+
+var posX = 0;
+var posY = 0;
+
+var moveX = 0;
+var moveY = 0;
+
+var speedScaler = 1;
+
+var newBug;
+
+var score = 0;
+var scoreMultiplier = 1;
+var timeMileStone = 5;
+
+var startingLives = 10;
+var currentLives = startingLives;
+var newLifeMilestone = 500
+
+function setup() {
+  createCanvas(canvasX, canvasY);
+  
+  
+  //Generate inital randomPosition
+  chooseRandPos(random([0,1,2,3]))  
+}
+
+function draw() {
+  if(gameStart){ //this is an awful way to do this, but I do not care, it works.
+  background(220);
+  newBug = new Bug(posX, posY, moveX, moveY);
+  
+  push();
+  newBug.createNewBug();
+  newBug.moveBug();
+  
+  if((posX > canvasX) || (posY > canvasY) || (posX < 0) || (posY < 0)){
+    currentLives -= 1;
+    BugReset();
+  }
+  pop();
+  
+  HUD();
+  gameScaler();
+  
+  if(score >= newLifeMilestone){
+    currentLives += 1;
+    newLifeMilestone *= 2;
+  }
+  }
+  
+  if(currentLives <= 0 && gameStart){
+    gameStart = false;
+    
+    text("You Lost!",150,150);
+    
+    textSize(18);
+    text("Your Score:", 50, 200);
+    text("Time Survived:", 225, 200);
+    
+    text(score, 50, 225);
+    text(getCurrentTime(), 225, 225);
+  }
+}
+
+//Resets bug to be used again
+function BugReset(){
+   posX = 0;
+   posY = 0;
+
+   moveX = 0;
+   moveY = 0;
+  
+  chooseRandPos(random([0,1,2,3]))  
+  
+}
+
+//Determines the speed and position of a new bug from a prewritten list of psuedo-random spots
+function chooseRandPos(randNum){
+  switch(randNum){
+  //Left-Right and Up-Down
+    case 0:
+      posY = random(15, canvasY - 15);
+      
+      moveX = round(2 * speedScaler);
+      break;
+    case 1:
+      posX = random(15, canvasX - 15);
+      
+      moveY = round(2 * speedScaler);
+      break;
+      
+      
+  //Right-Left and Down-Up
+    case 2:
+      posX = canvasX;
+      posY = random(15, canvasY - 15);
+      
+      moveX = round(-2 * speedScaler);
+      break;
+    case 3:
+      posX = random(15, canvasX - 15);
+      posY = canvasY - 15;
+      
+      moveY = round(-2 * speedScaler);
+      break;
+  } 
+  
+  //For Debug purpouses
+  //console.log(randNum);
+}
+
+function HUD(){
+  
+  var livesRectPosX = 10;
+  
+  fill('black');
+  textSize(20);
+  text("Score:", 10, 30);    
+  text(score, 10, 50);
+  
+  text("Time:", 10, 80);
+  text(getCurrentTime(),10,100);
+  
+  for(let i = 0; i < currentLives; i++){
+    
+    fill('rgba(0,255,0, 0.25)');
+    rect(livesRectPosX, 350, 10, 20, 1);
+    livesRectPosX += 20;
+  }
+}
+
+function getCurrentTime(){
+  return round(millis() / 1000);
+}
+
+function gameScaler(){
+  if(getCurrentTime() >= timeMileStone){
+    scoreMultiplier += 0.2;
+    speedScaler += 0.1;
+    
+    timeMileStone += 10;
+    console.log(scoreMultiplier);
+    console.log(speedScaler);
+  }  
+  
+}
+
+
+
+function mouseClicked(){
+  if(dist(mouseX, mouseY, posX, posY) < 20){
+    score += round(20 * scoreMultiplier);
+    BugReset();
+  }
+  else{
+    currentLives -= 1;
+  }
+}
+
+
+
+class Bug {
+  constructor(x, y, speedX, speedY){
+    this.x = x;
+    this.y = y;
+    this.speedX = speedX;
+    this.speedY = speedY;
+    
+    
+    
+  }  
+  
+  moveBug(){
+    posX += moveX;
+    posY += moveY;
+    translate(posX, posY);
+  
+  }
+  
+  createNewBug(){
+    fill('white');
+    this.bug = rect(this.x, this.y, 15);
+  }
+  
+}
