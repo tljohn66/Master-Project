@@ -1,5 +1,5 @@
-var gameStart = true;
-var changeBackground = false;
+var mode = 2;
+var times = 0;
 
 var canvasX = 400;
 var canvasY = 400;
@@ -31,8 +31,27 @@ function setup() {
 }
 
 function draw() {
-  if(gameStart){ //this is an awful way to do this, but I do not care, it works.
   background(220);
+  
+  switch(mode){
+    case 0:
+      MainMode();
+      break;
+    case 1: 
+      LoseMode();
+      break;
+    case 2:
+      StartMode();
+      break;
+  }
+  
+
+  
+
+}
+
+
+function MainMode(){
   newBug = new Bug(posX, posY, moveX, moveY);
   
   push();
@@ -52,11 +71,14 @@ function draw() {
     currentLives += 1;
     newLifeMilestone *= 2;
   }
-  }
   
-  if(currentLives <= 0 && gameStart){
-    gameStart = false;
-    
+  if(currentLives <= 0){
+    mode = 1;
+    times = getCurrentTime();
+  }
+}  
+
+function LoseMode(){
     text("You Lost!",150,150);
     
     textSize(18);
@@ -64,9 +86,27 @@ function draw() {
     text("Time Survived:", 225, 200);
     
     text(score, 50, 225);
-    text(getCurrentTime(), 225, 225);
-  }
+    
+    
+    text(times, 225, 225);
+     
+    
 }
+
+function StartMode(){
+  textSize(16);
+  text("Click the targets before they move off screen!", 20, 50)  
+  text("Be careful not to miss!", 20, 70);
+  text("The longer you go the harder it gets,", 20, 100)
+  text("rack up as many points as you can!", 20 , 120);
+  
+  text("Click the screen to start!", 20, 200);
+}
+
+
+
+
+
 
 //Resets bug to be used again
 function BugReset(){
@@ -151,17 +191,36 @@ function gameScaler(){
   
 }
 
-
+function resetGame(){
+  times = 0;
+  score = 0;
+  currentLives = 10;
+  
+  newLifeMilestone = 500;
+  scoreMultiplier = 1;
+  timeMilestone = 5;
+}
 
 function mouseClicked(){
-  if(dist(mouseX, mouseY, posX, posY) < 20){
-    score += round(20 * scoreMultiplier);
-    BugReset();
+  if(mode == 0){
+    if(dist(mouseX, mouseY, posX, posY) < 40){
+      score += round(20 * scoreMultiplier);
+      BugReset();
   }
-  else{
-    currentLives -= 1;
+    else{
+      currentLives -= 1;
+    }
+  }
+  
+  if(mode == 2){
+    mode = 0;
+  }
+  if(mode == 1){
+    mode = 2;
+    resetGame();
   }
 }
+
 
 
 
